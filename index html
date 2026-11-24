@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Сердце</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: grid;
+      place-items: center;
+      background: #000;
+      overflow: hidden;
+    }
+    pre {
+      margin: 0;
+      color: #ff2a4b;
+      font-family: "Courier New", Consolas, monospace;
+      font-weight: bold;
+      line-height: 0.95;
+      letter-spacing: 1px;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <pre id="heart"></pre>
+
+  <script>
+    const pre = document.getElementById("heart");
+    const width = 54;
+    const height = 28;
+
+    function render(t) {
+      const beat = 1 + 0.14 * Math.pow(Math.sin(t * 4.2), 2);
+      let out = "";
+
+      for (let y = 0; y < height; y++) {
+        const ny = ((height / 2 - y) / (height / 2)) * 1.25 / beat;
+        for (let x = 0; x < width; x++) {
+          const nx = ((x - width / 2) / (width / 2)) * 1.45 / beat;
+
+          const a = nx * nx + ny * ny - 1;
+          const val = a * a * a - nx * nx * ny * ny * ny;
+
+          out += val <= 0 ? "#" : " ";
+        }
+        out += "\n";
+      }
+
+      pre.textContent = out;
+    }
+
+    let start = performance.now();
+    function loop(now) {
+      render((now - start) / 1000);
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+  </script>
+</body>
+</html>
